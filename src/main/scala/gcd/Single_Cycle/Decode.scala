@@ -5,6 +5,7 @@ import chisel3 . util . _
 
 class Decode extends Module {
   val io = IO(new Bundle {
+    val pcin = Input(UInt(32.W))
     val ins = Input(UInt(32.W))
 //    val RD = Output(UInt(5.W))
 //    val Rs1 = Output(UInt(5.W))
@@ -23,6 +24,7 @@ class Decode extends Module {
     val btype = Output(Bool())
     val jump = Output(Bool())
     val readmem = Output(Bool())
+    val pcout = Output(UInt(32.W))
 
 
     //register file
@@ -39,6 +41,8 @@ class Decode extends Module {
 
   val cu = Module (new CU)
   val regfile = Module (new RegisterFile)
+
+  io.pcout := io.pcin
   cu.io.ins := io.ins
   regfile.io.RD := cu.io.RD
   regfile.io.Rs2in := cu.io.Rs2
