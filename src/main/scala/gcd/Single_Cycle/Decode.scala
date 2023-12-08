@@ -7,12 +7,12 @@ class Decode extends Module {
   val io = IO(new Bundle {
     val pcin = Input(UInt(32.W))
     val ins = Input(UInt(32.W))
-//    val RD = Output(UInt(5.W))
+    val RD = Output(UInt(5.W))
 //    val Rs1 = Output(UInt(5.W))
 //    val Rs2 = Output(UInt(5.W))
     val Imm = Output(UInt(32.W))
     val Instype = Output(Bool()) //Immidiate / Register select
-    //val RegWrite = Output(Bool())
+    val RegWriteout = Output(Bool())
     val MemWrite = Output(Bool())
     val func = Output(UInt(5.W))
     val wbselect = Output(UInt(2.W))
@@ -28,8 +28,8 @@ class Decode extends Module {
 
 
     //register file
-    //val Wen = Input(Bool())
-//    val RD = Input(UInt(5.W))
+    val RegWritein = Input(Bool())
+    val RDin = Input(UInt(5.W))
 //    val Rs1in = Input(UInt(5.W))
 //    val Rs2in = Input(UInt(5.W))
     val Rs1out = Output(UInt(32.W))
@@ -44,10 +44,12 @@ class Decode extends Module {
 
   io.pcout := io.pcin
   cu.io.ins := io.ins
-  regfile.io.RD := cu.io.RD
+  io.RD:= cu.io.RD
+  io.RegWriteout:=cu.io.RegWrite
+  regfile.io.RD := io.RDin
   regfile.io.Rs2in := cu.io.Rs2
   regfile.io.Rs1in := cu.io.Rs1
-  regfile.io.Wen := cu.io.RegWrite
+  regfile.io.Wen := io.RegWritein
 
 
   io.MemWrite := cu.io.MemWrite

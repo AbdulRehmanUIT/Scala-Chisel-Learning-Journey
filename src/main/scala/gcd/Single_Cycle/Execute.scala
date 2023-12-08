@@ -28,7 +28,8 @@ class Execute extends Module with Config {
     //inputs from decode forwarded
     val Imm = Input(UInt(32.W))
     val Instype = Input(Bool()) //Immidiate / Register select
-    //val RegWrite = Output(Bool())
+    val RegWriteout = Output(Bool())
+    val RegWritein = Input(Bool())
     val MemWritein = Input(Bool())
     val MemWriteout = Output(Bool())
     val funcin = Input(UInt(5.W))
@@ -43,8 +44,18 @@ class Execute extends Module with Config {
     val readmemin = Input(Bool())
     val readmemout = Output(Bool())
     val wbselectout = Output(UInt(2.W))
+    val RDin = Input(UInt(5.W))
+    val RDout = Output(UInt(5.W))
+    val in_Bout = Output(UInt(WLEN.W))
+
+
 
   })
+
+  io.in_Bout:= io.in_B
+
+  io.RDout:=io.RDin
+  io.RegWriteout:=io.RegWritein
 
   io.wbselectout := io.wbselectin
   io.MemWriteout := io.MemWritein
@@ -68,7 +79,7 @@ class Execute extends Module with Config {
 
 
   Alu.io.alu_Op := io.alu_Op
-  Alu.io.alu_Op := Mux(io.aluselect,0.U,io.func)
+  Alu.io.alu_Op := Mux(io.aluselect,0.U,io.funcin)
   BALU.io.fun3 := io.fun3
   io.out := Alu.io.out
   io.doBranch := BALU.io.doBranch
