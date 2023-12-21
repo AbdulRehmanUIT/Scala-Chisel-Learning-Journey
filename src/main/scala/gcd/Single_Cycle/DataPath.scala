@@ -6,6 +6,8 @@ import chisel3 . util . _
 
 class DataPath extends Module {
   val io = IO(new Bundle {
+    val Pcout= Output(UInt(32.W))
+    val insin = Input(UInt(32.W))
     val out = Output(UInt(32.W))
   })
   io.out := 0.U
@@ -13,7 +15,7 @@ class DataPath extends Module {
   //val pc = Module(new PC)
   val cu = Module(new CU)
   val regfile = Module(new RegisterFile)
-  val insmem = Module(new InstMem("C:\\Users\\Hamza's Son\\Desktop\\DSA SEM2 Java project\\Scala-Chisel-Learning-Journey\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt"))
+  //val insmem = Module(new InstMem("C:\\Users\\Hamza's Son\\Desktop\\DSA SEM2 Java project\\Scala-Chisel-Learning-Journey\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt"))
   val datamem = Module(new Datamem)
   val alu = Module(new ALU1)
   val checkbranch = Module(new BranchALU)
@@ -26,9 +28,9 @@ class DataPath extends Module {
 
   cu.io.dobranch := checkbranch.io.doBranch
   checkbranch.io.fun3:=cu.io.btypefun
-  insmem.io.addr := pc
+  io.Pcout := pc
   checkbranch.io.isBtype := cu.io.btype
-  cu.io.ins := insmem.io.inst
+  cu.io.ins := io.insin
   alu.io.alu_Op := Mux(cu.io.aluselect,0.U,cu.io.func)
   regfile.io.Wen := cu.io.RegWrite
   datamem.io.Wen := cu.io.MemWrite
