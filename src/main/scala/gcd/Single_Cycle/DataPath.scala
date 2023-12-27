@@ -22,13 +22,14 @@ class DataPath extends Module {
 
   val pc = RegInit(0.U(32.W))
   pc := Mux(cu.io.pcselec,(alu.io.out),pc+4.U)
+  io.Pcout := Mux(cu.io.pcselec,(alu.io.out),pc+4.U)
 
 
 
 
   cu.io.dobranch := checkbranch.io.doBranch
   checkbranch.io.fun3:=cu.io.btypefun
-  io.Pcout := pc
+
   checkbranch.io.isBtype := cu.io.btype
   cu.io.ins := io.insin
   alu.io.alu_Op := Mux(cu.io.aluselect,0.U,cu.io.func)

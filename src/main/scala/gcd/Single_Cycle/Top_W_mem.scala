@@ -12,12 +12,13 @@ class Top_W_mem extends Module {
   val datapath = Module(new DataPath)
   val insmem = Module(new InstMem("/home/abdulrehman/Desktop/single cycle/Scala-Chisel-Learning-Journey/src/main/scala/gcd/Single_Cycle/Imem.txt"))
 
-  datapath.io.insin := insmem.io.inst
-  val check = Reg(UInt(32.W))
-  check := datapath.io.Pcout
-  insmem.io.addr := check
 
-  //insmem.io.addr := datapath.io.Pcout
+//  val check = Reg(UInt(32.W))
+//  check := datapath.io.Pcout
+//  insmem.io.addr := check
+
+  insmem.io.addr := datapath.io.Pcout
+  datapath.io.insin := insmem.io.inst
 
   io.out := datapath.io.out
 

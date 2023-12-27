@@ -13,5 +13,5 @@ class InstMem ( initFile : String ) extends Module {
 
   val imem = SyncReadMem ( 1024, UInt( 32.W ) )
   loadMemoryFromFile ( imem , initFile )
-  io . inst := imem ( io . addr>>2)
+  io . inst := imem (io.addr>>2)
 }
