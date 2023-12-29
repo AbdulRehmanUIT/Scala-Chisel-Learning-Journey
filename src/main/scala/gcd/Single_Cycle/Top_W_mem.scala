@@ -20,6 +20,7 @@ class Top_W_mem extends Module {
   insmem.io.addr := datapath.io.Pcout
   datapath.io.insin := insmem.io.inst
 
+
   io.out := datapath.io.out
 
 
