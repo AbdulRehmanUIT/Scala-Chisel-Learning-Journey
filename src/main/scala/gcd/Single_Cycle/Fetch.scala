@@ -8,6 +8,7 @@ class Fetch extends Module {
     val pcselect = Input(Bool())
     val aluout = Input(UInt(32.W))
     val ins = Output(UInt(32.W))
+    val insin = Input(UInt(32.W))
     val pcout = Output(UInt(32.W))
     val pcout4 = Output(UInt(32.W))
 
@@ -17,15 +18,15 @@ class Fetch extends Module {
   io.pcout4 := 0.U
   // Windows : "C:\Users\Hamza's Son\Desktop\5 stage\RV32I--5-Stage---Pipeline-\src\main\scala\gcd\Single_Cycle\Imem.txt"
   // Ubuntu : "//home/abdulrehman/Desktop/5stage/RV32I--5-Stage---Pipeline-/src/main/scala/gcd/Single_Cycle/Imem.txt"
-  val insmem2 = Module(new InstMem("C:\\Users\\Hamza's Son\\Desktop\\5 stage\\RV32I--5-Stage---Pipeline-\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt"))
+  //val insmem2 = Module(new InstMem("C:\\Users\\Hamza's Son\\Desktop\\5 stage\\RV32I--5-Stage---Pipeline-\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt"))
   val pc = RegInit(0.U(32.W))
   pc := Mux(io.pcselect, (io.aluout), pc + 4.U)
 
-  io.pcout := pc
+  io.pcout := Mux(io.pcselect, (io.aluout), pc + 4.U)
   io.pcout4:= pc+4.U
 
-  insmem2.io.addr := pc
-  io.ins:=insmem2.io.inst
+  //insmem2.io.addr := pc
+  io.ins := io.insin
 
 
 
