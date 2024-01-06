@@ -20,7 +20,7 @@ class Execute extends Module with Config {
 //    val in_A = Input(UInt(32.W))
 //    val in_B = Input(UInt(32.W))
     val fun3 = Input(UInt(4.W)) // btypefunc in
-//    val doBranch = Output(Bool())
+    val doBranch = Output(Bool())
     val isBtype = Input(Bool())
     val pcin = Input(UInt(32.W))
     val pcout = Output(UInt(32.W))
@@ -44,6 +44,7 @@ class Execute extends Module with Config {
     val pcselecout = Output(Bool())
     //val btype = Input(Bool())
     val jump = Input(Bool())
+
     val readmemin = Input(Bool())
     val readmemout = Output(Bool())
 
@@ -96,8 +97,7 @@ class Execute extends Module with Config {
   Alu.io.alu_Op := Mux(io.aluselect,0.U,io.funcin)
   BALU.io.fun3 := io.fun3
   io.out := Alu.io.out
-  //io.doBranch := BALU.io.doBranch
+  io.doBranch := BALU.io.doBranch
   BALU.io.isBtype := io.isBtype
-
 
 }

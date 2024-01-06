@@ -690,6 +690,7 @@ circuit CORETOP :
     input io_in_B : UInt<32>
     output io_out : UInt<32>
     input io_fun3 : UInt<4>
+    output io_doBranch : UInt<1>
     input io_isBtype : UInt<1>
     input io_pcin : UInt<32>
     output io_pcout : UInt<32>
@@ -714,34 +715,35 @@ circuit CORETOP :
     output io_RDout : UInt<5>
     output io_in_Bout : UInt<32>
 
-    inst Alu of ALU1 @[Execute.scala 83:19]
-    inst BALU of BranchALU @[Execute.scala 84:20]
-    node _Alu_io_in_A_T = or(BALU.io_doBranch, io_jump) @[Execute.scala 86:39]
-    node _Alu_io_in_A_T_1 = mux(_Alu_io_in_A_T, io_pcin, io_in_A) @[Execute.scala 86:21]
-    node _Alu_io_in_B_T = eq(io_Instype, UInt<1>("h0")) @[Execute.scala 87:22]
-    node _Alu_io_in_B_T_1 = mux(_Alu_io_in_B_T, io_Imm, io_in_B) @[Execute.scala 87:21]
-    node _Alu_io_alu_Op_T = mux(io_aluselect, UInt<1>("h0"), io_funcin) @[Execute.scala 96:23]
-    io_out <= Alu.io_out @[Execute.scala 98:10]
-    io_pcout <= io_pcin @[Execute.scala 77:12]
-    io_RegWriteout <= io_RegWritein @[Execute.scala 71:17]
-    io_MemWriteout <= io_MemWritein @[Execute.scala 74:18]
-    io_wbselectout <= io_wbselectin @[Execute.scala 73:18]
-    io_lengthselectout <= io_lengthselectin @[Execute.scala 75:22]
-    io_pcselecout <= io_pcselec @[Execute.scala 67:17]
-    io_readmemout <= io_readmemin @[Execute.scala 76:17]
-    io_RDout <= io_RDin @[Execute.scala 70:11]
-    io_in_Bout <= io_in_B @[Execute.scala 68:13]
+    inst Alu of ALU1 @[Execute.scala 84:19]
+    inst BALU of BranchALU @[Execute.scala 85:20]
+    node _Alu_io_in_A_T = or(BALU.io_doBranch, io_jump) @[Execute.scala 87:39]
+    node _Alu_io_in_A_T_1 = mux(_Alu_io_in_A_T, io_pcin, io_in_A) @[Execute.scala 87:21]
+    node _Alu_io_in_B_T = eq(io_Instype, UInt<1>("h0")) @[Execute.scala 88:22]
+    node _Alu_io_in_B_T_1 = mux(_Alu_io_in_B_T, io_Imm, io_in_B) @[Execute.scala 88:21]
+    node _Alu_io_alu_Op_T = mux(io_aluselect, UInt<1>("h0"), io_funcin) @[Execute.scala 97:23]
+    io_out <= Alu.io_out @[Execute.scala 99:10]
+    io_doBranch <= BALU.io_doBranch @[Execute.scala 100:15]
+    io_pcout <= io_pcin @[Execute.scala 78:12]
+    io_RegWriteout <= io_RegWritein @[Execute.scala 72:17]
+    io_MemWriteout <= io_MemWritein @[Execute.scala 75:18]
+    io_wbselectout <= io_wbselectin @[Execute.scala 74:18]
+    io_lengthselectout <= io_lengthselectin @[Execute.scala 76:22]
+    io_pcselecout <= io_pcselec @[Execute.scala 68:17]
+    io_readmemout <= io_readmemin @[Execute.scala 77:17]
+    io_RDout <= io_RDin @[Execute.scala 71:11]
+    io_in_Bout <= io_in_B @[Execute.scala 69:13]
     Alu.clock <= clock
     Alu.reset <= reset
-    Alu.io_in_A <= _Alu_io_in_A_T_1 @[Execute.scala 86:15]
-    Alu.io_in_B <= _Alu_io_in_B_T_1 @[Execute.scala 87:15]
-    Alu.io_alu_Op <= bits(_Alu_io_alu_Op_T, 3, 0) @[Execute.scala 96:17]
+    Alu.io_in_A <= _Alu_io_in_A_T_1 @[Execute.scala 87:15]
+    Alu.io_in_B <= _Alu_io_in_B_T_1 @[Execute.scala 88:15]
+    Alu.io_alu_Op <= bits(_Alu_io_alu_Op_T, 3, 0) @[Execute.scala 97:17]
     BALU.clock <= clock
     BALU.reset <= reset
-    BALU.io_in_A <= io_in_A @[Execute.scala 91:16]
-    BALU.io_in_B <= io_in_B @[Execute.scala 92:16]
-    BALU.io_fun3 <= io_fun3 @[Execute.scala 97:16]
-    BALU.io_isBtype <= io_isBtype @[Execute.scala 100:19]
+    BALU.io_in_A <= io_in_A @[Execute.scala 92:16]
+    BALU.io_in_B <= io_in_B @[Execute.scala 93:16]
+    BALU.io_fun3 <= io_fun3 @[Execute.scala 98:16]
+    BALU.io_isBtype <= io_isBtype @[Execute.scala 101:19]
 
   module Datamem :
     input clock : Clock
@@ -1074,23 +1076,29 @@ circuit CORETOP :
     input io_pcin : UInt<32>
     input io_pcselecin : UInt<1>
     output io_pcselecout : UInt<1>
+    output io_dataOutpc : UInt<32>
     input io_Rd : UInt<5>
     input io_Regwrite : UInt<1>
     output io_Rdout : UInt<5>
     output io_Regwriteout : UInt<1>
 
-    node _T = eq(io_wbselect, UInt<1>("h1")) @[Wb.scala 30:20]
-    node _T_1 = eq(io_wbselect, UInt<1>("h0")) @[Wb.scala 33:27]
-    node _T_2 = eq(io_wbselect, UInt<2>("h2")) @[Wb.scala 35:28]
-    node _io_dataOut_T = add(io_pcin, UInt<3>("h4")) @[Wb.scala 36:30]
-    node _io_dataOut_T_1 = tail(_io_dataOut_T, 1) @[Wb.scala 36:30]
-    node _GEN_0 = mux(_T_2, _io_dataOut_T_1, UInt<1>("h0")) @[Wb.scala 35:37 Wb.scala 36:18 Wb.scala 24:14]
-    node _GEN_1 = mux(_T_1, io_datamemin, _GEN_0) @[Wb.scala 33:36 Wb.scala 34:17]
-    node _GEN_2 = mux(_T, io_Aludatain, _GEN_1) @[Wb.scala 30:29 Wb.scala 31:16]
-    io_dataOut <= _GEN_2
-    io_pcselecout <= io_pcselecin @[Wb.scala 28:17]
-    io_Rdout <= io_Rd @[Wb.scala 39:11]
-    io_Regwriteout <= io_Regwrite @[Wb.scala 40:17]
+    node _T = eq(io_pcselecin, UInt<1>("h1")) @[Wb.scala 31:21]
+    node _io_dataOutpc_T = sub(io_Aludatain, UInt<3>("h4")) @[Wb.scala 32:33]
+    node _io_dataOutpc_T_1 = tail(_io_dataOutpc_T, 1) @[Wb.scala 32:33]
+    node _GEN_0 = mux(_T, _io_dataOutpc_T_1, UInt<1>("h0")) @[Wb.scala 31:28 Wb.scala 32:18 Wb.scala 25:15]
+    node _T_1 = eq(io_wbselect, UInt<1>("h1")) @[Wb.scala 35:20]
+    node _T_2 = eq(io_wbselect, UInt<1>("h0")) @[Wb.scala 38:27]
+    node _T_3 = eq(io_wbselect, UInt<2>("h2")) @[Wb.scala 40:28]
+    node _io_dataOut_T = add(io_pcin, UInt<3>("h4")) @[Wb.scala 41:30]
+    node _io_dataOut_T_1 = tail(_io_dataOut_T, 1) @[Wb.scala 41:30]
+    node _GEN_1 = mux(_T_3, _io_dataOut_T_1, UInt<1>("h0")) @[Wb.scala 40:37 Wb.scala 41:18 Wb.scala 26:14]
+    node _GEN_2 = mux(_T_2, io_datamemin, _GEN_1) @[Wb.scala 38:36 Wb.scala 39:17]
+    node _GEN_3 = mux(_T_1, io_Aludatain, _GEN_2) @[Wb.scala 35:29 Wb.scala 36:16]
+    io_dataOut <= _GEN_3
+    io_pcselecout <= io_pcselecin @[Wb.scala 30:17]
+    io_dataOutpc <= _GEN_0
+    io_Rdout <= io_Rd @[Wb.scala 44:11]
+    io_Regwriteout <= io_Regwrite @[Wb.scala 45:17]
 
   module TopCore_5stage :
     input clock : Clock
@@ -1108,19 +1116,19 @@ circuit CORETOP :
       reset => (UInt<1>("h0"), ins) @[TopCore_5stage.scala 33:16]
     reg pc : UInt<32>, clock with :
       reset => (UInt<1>("h0"), pc) @[TopCore_5stage.scala 36:15]
-    io_wbout <= Wb.io_dataOut @[TopCore_5stage.scala 204:12]
+    io_wbout <= Wb.io_dataOut @[TopCore_5stage.scala 205:12]
     io_pcout <= Fetch.io_pcout @[TopCore_5stage.scala 25:12]
     Fetch.clock <= clock
     Fetch.reset <= reset
     Fetch.io_pcselect <= Wb.io_pcselecout @[TopCore_5stage.scala 201:21]
-    Fetch.io_aluout <= UInt<1>("h0") @[TopCore_5stage.scala 39:19]
+    Fetch.io_aluout <= Wb.io_dataOutpc @[TopCore_5stage.scala 202:19]
     Fetch.io_insin <= io_insin @[TopCore_5stage.scala 26:18]
     Decode.clock <= clock
     Decode.reset <= reset
     Decode.io_pcin <= pc @[TopCore_5stage.scala 38:17]
     Decode.io_ins <= ins @[TopCore_5stage.scala 35:16]
-    Decode.io_dobranch <= UInt<1>("h0") @[TopCore_5stage.scala 44:21]
-    Decode.io_RegWritein <= Wb.io_Regwriteout @[TopCore_5stage.scala 202:24]
+    Decode.io_dobranch <= Execute.io_doBranch @[TopCore_5stage.scala 44:21]
+    Decode.io_RegWritein <= Wb.io_Regwriteout @[TopCore_5stage.scala 203:24]
     Decode.io_RDin <= Wb.io_Rdout @[TopCore_5stage.scala 199:17]
     Decode.io_datain <= Wb.io_dataOut @[TopCore_5stage.scala 200:20]
     Execute.clock <= clock

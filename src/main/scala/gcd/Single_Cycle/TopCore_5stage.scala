@@ -41,7 +41,7 @@ class TopCore_5stage extends Module {
   Decode.io.RDin := 0.U
   Decode.io.datain:= 0.U
   Decode.io.RegWritein := 0.U
-  Decode.io.dobranch:=0.U
+  Decode.io.dobranch:=Execute.io.doBranch
 
   //io.fetchout:= ins
 
@@ -199,6 +199,7 @@ class TopCore_5stage extends Module {
   Decode.io.RDin:= Wb.io.Rdout
   Decode.io.datain := Wb.io.dataOut
   Fetch.io.pcselect := Wb.io.pcselecout
+  Fetch.io.aluout := Wb.io.dataOutpc
   Decode.io.RegWritein := Wb.io.Regwriteout
 
   io.wbout := Wb.io.dataOut

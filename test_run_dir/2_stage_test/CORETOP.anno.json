@@ -198,7 +198,7 @@
   {
     "class":"firrtl.annotations.LoadMemoryAnnotation",
     "target":"CORETOP.InstMem.imem",
-    "fileName":"C:\\Users\\Hamza's Son\\Desktop\\5 stage\\RV32I--5-Stage---Pipeline-\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt",
+    "fileName":"C:\\Users\\Hamza's Son\\Desktop\\DSA SEM2 Java project\\Scala-Chisel-Learning-Journey\\src\\main\\scala\\gcd\\Single_Cycle\\Imem.txt",
     "hexOrBinary":"h",
     "originalMemoryNameOpt":"imem"
   },

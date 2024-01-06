@@ -13,6 +13,7 @@ class Wb extends Module {
     val pcin = Input(UInt(32.W))
     val pcselecin = Input(Bool())
     val pcselecout = Output(Bool())
+    val dataOutpc = Output(UInt(32.W))
     //val memwrite = Input(Bool())
     val Rd = Input(UInt(5.W))
     val Regwrite = Input(Bool())
@@ -21,11 +22,15 @@ class Wb extends Module {
 
 
   })
+  io.dataOutpc:=0.U
   io.dataOut := 0.U
   io.Rdout := 0.U
   io.Regwriteout := false.B
 
   io.pcselecout := io.pcselecin
+  when(io.pcselecin ===1.U){
+    io.dataOutpc := io.Aludatain-4.U
+  }
 
   when(io.wbselect === 1.U) {
     io.dataOut := io.Aludatain
