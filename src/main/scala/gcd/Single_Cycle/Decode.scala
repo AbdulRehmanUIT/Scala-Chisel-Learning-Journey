@@ -10,7 +10,7 @@ class Decode extends Module {
     val ins = Input(UInt(32.W))
     val RD = Output(UInt(5.W))
     val Rs1sel = Output(UInt(5.W))
-    val Rs2sel = Output(UInt(5.W))
+    //val Rs2sel = Output(UInt(5.W))
     val Imm = Output(UInt(32.W))
     val Instype = Output(Bool()) //Immidiate / Register select
     val RegWriteout = Output(Bool())
