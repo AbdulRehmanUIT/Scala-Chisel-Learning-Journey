@@ -1,6 +1,7 @@
 ### Project Specific stuff
 null/
 .vscode
+.metals
 ### XilinxISE template
 # intermediate build files
 *.bgn
