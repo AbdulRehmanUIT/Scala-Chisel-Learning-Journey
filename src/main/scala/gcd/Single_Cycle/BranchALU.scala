@@ -8,9 +8,9 @@ class BranchALU extends Module {
   val io = IO(new Bundle {
     val in_A = Input(UInt(32.W))
     val in_B = Input(UInt(32.W))
-    val fun3 = Input(UInt(4.W))
-    val doBranch = Output(Bool())
-    val isBtype = Input(Bool())
+    val fun3 = Input(UInt(4.W)) //from CU
+    val doBranch = Output(Bool()) 
+    val isBtype = Input(Bool()) //from CU 
   })
   val Beq = io.in_A === io.in_B
   val blt = io.in_A.asSInt < io.in_B.asSInt
